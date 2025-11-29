@@ -2,45 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <queries>
-        <package android:name="dev.widebars.audiobook.debug" />
-        <package android:name="dev.widebars.audiobook" />
-        <package android:name="dev.widebars.files.debug" />
-        <package android:name="dev.widebars.files" />
-        <package android:name="dev.widebars.dialer.debug" />
-        <package android:name="dev.widebars.dialer" />
-        <package android:name="dev.widebars.contacts.debug" />
-        <package android:name="dev.widebars.contacts" />
-        <package android:name="dev.widebars.smsmessenger.debug" />
-        <package android:name="dev.widebars.smsmessenger" />
-        <package android:name="dev.widebars.voicerecorder.debug" />
-        <package android:name="dev.widebars.voicerecorder" />
-        <package android:name="dev.widebars.voicerecorderfree.debug" />
-        <package android:name="dev.widebars.voicerecorderfree" />
-        <package android:name="dev.widebars.calendar" />
-        <package android:name="dev.widebars.calendar.debug" />
-        <package android:name="dev.widebars.keyboard" />
-        <package android:name="dev.widebars.keyboard.debug" />
-        <package android:name="dev.widebars.audiobook.debug" />
-        <package android:name="dev.widebars.audiobook" />
-        <package android:name="dev.widebars.files.debug" />
-        <package android:name="dev.widebars.files" />
-        <package android:name="dev.widebars.dialer.debug" />
-        <package android:name="dev.widebars.dialer" />
-        <package android:name="dev.widebars.contacts.debug" />
-        <package android:name="dev.widebars.contacts" />
-        <package android:name="dev.widebars.messages.debug" />
-        <package android:name="dev.widebars.messages" />
-        <package android:name="dev.widebars.voicerecorder.debug" />
-        <package android:name="dev.widebars.voicerecorder" />
-        <package android:name="dev.widebars.voicerecorderfree.debug" />
-        <package android:name="dev.widebars.voicerecorderfree" />
-        <package android:name="dev.widebars.calendar" />
-        <package android:name="dev.widebars.calendar.debug" />
-        <package android:name="dev.widebars.keyboard" />
-        <package android:name="dev.widebars.keyboard.debug" />
-    </queries>
-
     <uses-feature
         android:name="android.hardware.faketouch"
         android:required="false" />
