@@ -31,6 +31,7 @@ import dev.widebars.commons.compose.menus.OverflowMode
 import dev.widebars.commons.compose.settings.SettingsGroup
 import dev.widebars.commons.compose.settings.SettingsHorizontalDivider
 import dev.widebars.commons.compose.settings.SettingsPreferenceComponent
+import dev.widebars.commons.compose.settings.SettingsPurchaseComponent
 import dev.widebars.commons.compose.theme.AppThemeSurface
 import dev.widebars.commons.compose.theme.LocalTheme
 import dev.widebars.commons.compose.theme.SimpleTheme
@@ -95,6 +96,14 @@ fun MainScreen(
             //verticalArrangement = Arrangement.Center
         ) {
             Spacer(modifier = Modifier.size(8.dp))
+            var shouldShake by remember { mutableStateOf(false) }
+            SettingsPurchaseComponent(
+                onPurchaseClick = startPurchaseActivity,
+                enabledShake = shouldShake,
+                onShakeFinished = {
+                    shouldShake = false
+                }
+            )
             SettingsGroup(
                 title = { Text(text = "Test settings".uppercase(), modifier = Modifier.padding(start = 36.dp)) }
             ) {
@@ -132,7 +141,7 @@ fun MainScreen(
                 SettingsPreferenceComponent(
                     label = "Purchase",
                     showChevron = true,
-                    doOnPreferenceClick = startPurchaseActivity
+                    doOnPreferenceClick = { shouldShake = true }
                 )
                 SettingsHorizontalDivider(thickness = 2.dp)
                 SettingsPreferenceComponent(
