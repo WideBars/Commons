@@ -156,12 +156,9 @@ class AboutActivity : BaseComposeActivity() {
     }
 
     private fun onPrivacyPolicyClick() {
-        launchViewIntent(getPrivacyPolicyUrl())
-    }
-
-    private fun getPrivacyPolicyUrl(): String {
-        val repositoryName = intent.getStringExtra(APP_REPOSITORY_NAME)
-        return "https://github.com/WideBars/$repositoryName/blob/master/PRIVACY.md"
+        launchViewIntent(
+            "${getGithubUrl()}/blob/master/PRIVACY.md"
+        )
     }
 
     private fun onTipJarClick() {
