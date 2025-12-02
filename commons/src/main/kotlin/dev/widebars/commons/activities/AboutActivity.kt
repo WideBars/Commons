@@ -156,18 +156,12 @@ class AboutActivity : BaseComposeActivity() {
     }
 
     private fun onPrivacyPolicyClick() {
-        val appId = baseConfig.appId.removePrefix("com.").removePrefix("dev.").removeSuffix(".debug")
-        val url = when (appId) {
-            "widebars.dialer" -> "https://sites.google.com/view/WideBars/about/privacy-policy-right-dialer"
-            "widebars.smsmessenger" -> "https://sites.google.com/view/WideBars/about/privacy-policy-right-messages"
-            "widebars.contacts" -> "https://sites.google.com/view/WideBars/about/privacy-policy-right-contacts"
-            "widebars.gallery" -> "https://sites.google.com/view/WideBars/about/privacy-policy-right-gallery"
-            "widebars.filemanager" -> "https://sites.google.com/view/WideBars/about/privacy-policy-right-files"
-            "widebars.voicerecorder", "widebars.voicerecorderfree" -> "https://sites.google.com/view/WideBars/about/privacy-policy-right-voice-recorder"
-            "widebars.calendar" -> "https://sites.google.com/view/WideBars/about/privacy-policy-right-calendar"
-            else -> "https://sites.google.com/view/WideBars/about/privacy-policy"
-        }
-        launchViewIntent(url)
+        launchViewIntent(getPrivacyPolicyUrl())
+    }
+
+    private fun getPrivacyPolicyUrl(): String {
+        val repositoryName = intent.getStringExtra(APP_REPOSITORY_NAME)
+        return "https://github.com/WideBars/$repositoryName/blob/master/PRIVACY.md"
     }
 
     private fun onTipJarClick() {
