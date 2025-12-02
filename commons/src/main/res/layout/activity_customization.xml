@@ -92,18 +92,18 @@
                 android:alpha="0.6"/>
 
             <androidx.cardview.widget.CardView
-                android:id="@+id/primaryColorsHolder"
+                android:id="@+id/colorsHolder"
                 style="@style/SettingsSectionHolder"
-                android:layout_marginTop="@dimen/larger_margin"
                 android:layout_below="@+id/customizationThemeDescription"
+                android:layout_marginTop="@dimen/larger_margin"
+                android:layout_marginBottom="32dp"
                 app:cardCornerRadius="@dimen/activity_margin"
                 app:cardElevation="0dp">
 
-                <LinearLayout
-                    android:id="@+id/primaryColorsWrapper"
+                <RelativeLayout
+                    android:id="@+id/colorsWrapper"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_height="wrap_content">
 
                     <RelativeLayout
                         android:id="@+id/customizationPrimaryColorHolder"
@@ -128,9 +128,18 @@
                             android:contentDescription="@null" />
                     </RelativeLayout>
 
+                    <ImageView
+                        android:id="@+id/customizationPrimaryColorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/customizationPrimaryColorHolder"
+                        android:background="@color/white"/>
+
                     <RelativeLayout
                         android:id="@+id/settingsTopAppBarColorIconHolder"
-                        style="@style/SettingsHolderSwitchStyle">
+                        style="@style/SettingsHolderSwitchStyle"
+                        android:layout_below="@+id/customizationPrimaryColorDivider"
+                        android:visibility="gone">
 
                         <dev.widebars.commons.views.MyMaterialSwitch
                             android:id="@+id/settingsTopAppBarColorIcon"
@@ -139,9 +148,19 @@
                             app:switchPadding="@dimen/bigger_margin"/>
                     </RelativeLayout>
 
+                    <ImageView
+                        android:id="@+id/settingsTopAppBarColorIconDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/settingsTopAppBarColorIconHolder"
+                        android:background="@color/white"
+                        android:visibility="gone"/>
+
                     <RelativeLayout
                         android:id="@+id/settingsTopAppBarColorTitleHolder"
-                        style="@style/SettingsHolderSwitchStyle">
+                        style="@style/SettingsHolderSwitchStyle"
+                        android:layout_below="@+id/settingsTopAppBarColorIconDivider"
+                        android:visibility="gone">
 
                         <dev.widebars.commons.views.MyMaterialSwitch
                             android:id="@+id/settingsTopAppBarColorTitle"
@@ -149,26 +168,19 @@
                             android:text="@string/top_app_bar_color_title"
                             app:switchPadding="@dimen/bigger_margin"/>
                     </RelativeLayout>
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/colorsHolder"
-                style="@style/SettingsSectionHolder"
-                android:layout_below="@+id/primaryColorsHolder"
-                android:layout_marginTop="@dimen/larger_margin"
-                android:layout_marginBottom="32dp"
-                app:cardCornerRadius="@dimen/activity_margin"
-                app:cardElevation="0dp">
-
-                <RelativeLayout
-                    android:id="@+id/colorsWrapper"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    <ImageView
+                        android:id="@+id/settingsTopAppBarColorTitleDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/settingsTopAppBarColorTitleHolder"
+                        android:background="@color/white"
+                        android:visibility="gone"/>
 
                     <RelativeLayout
                         android:id="@+id/customizationUseAccentColorHolder"
-                        style="@style/SettingsHolderSwitchStyle">
+                        style="@style/SettingsHolderSwitchStyle"
+                        android:layout_below="@+id/settingsTopAppBarColorTitleDivider">
 
                         <dev.widebars.commons.views.MyTextView
                             android:id="@+id/customizationUseAccentColorLabel"
@@ -201,9 +213,16 @@
                             app:switchPadding="@dimen/bigger_margin" />
                     </RelativeLayout>
 
-                    <RelativeLayout
-                        android:id="@+id/customization_accent_color_holder"
+                    <ImageView
+                        android:id="@+id/customizationUseAccentColorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
                         android:layout_below="@+id/customizationUseAccentColorHolder"
+                        android:background="@color/white"/>
+
+                    <RelativeLayout
+                        android:id="@+id/customizationAccentColorHolder"
+                        android:layout_below="@+id/customizationUseAccentColorDivider"
                         style="@style/SettingsHolderStyle">
 
                         <dev.widebars.commons.views.MyTextView
@@ -225,9 +244,16 @@
                             android:contentDescription="@null" />
                     </RelativeLayout>
 
+                    <ImageView
+                        android:id="@+id/customizationAccentColorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/customizationAccentColorHolder"
+                        android:background="@color/white"/>
+
                     <RelativeLayout
-                        android:id="@+id/customization_background_color_holder"
-                        android:layout_below="@+id/customization_accent_color_holder"
+                        android:id="@+id/customizationBackgroundColorHolder"
+                        android:layout_below="@+id/customizationAccentColorDivider"
                         style="@style/SettingsHolderStyle">
 
                         <dev.widebars.commons.views.MyTextView
@@ -249,9 +275,16 @@
                             android:contentDescription="@null" />
                     </RelativeLayout>
 
+                    <ImageView
+                        android:id="@+id/customizationBackgroundColorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/customizationBackgroundColorHolder"
+                        android:background="@color/white"/>
+
                     <RelativeLayout
-                        android:id="@+id/customization_text_color_holder"
-                        android:layout_below="@+id/customization_background_color_holder"
+                        android:id="@+id/customizationTextColorHolder"
+                        android:layout_below="@+id/customizationBackgroundColorDivider"
                         style="@style/SettingsHolderStyle">
 
                         <dev.widebars.commons.views.MyTextView
@@ -273,10 +306,19 @@
                             android:contentDescription="@null" />
                     </RelativeLayout>
 
+                    <ImageView
+                        android:id="@+id/customizationTextColorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/customizationTextColorHolder"
+                        android:background="@color/white"
+                        android:visibility="gone"/>
+
                     <RelativeLayout
                         android:id="@+id/customizationTextCursorColorHolder"
-                        android:layout_below="@+id/customization_text_color_holder"
-                        style="@style/SettingsHolderStyle">
+                        android:layout_below="@+id/customizationTextColorDivider"
+                        style="@style/SettingsHolderStyle"
+                        android:visibility="gone">
 
                         <dev.widebars.commons.views.MyTextView
                             android:id="@+id/customization_text_cursor_color_label"
@@ -308,10 +350,17 @@
                             android:visibility="gone"/>
                     </RelativeLayout>
 
+                    <ImageView
+                        android:id="@+id/customizationTextCursorColorDivider"
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:layout_below="@+id/customizationTextCursorColorHolder"
+                        android:background="@color/white"/>
+
                     <RelativeLayout
                         android:id="@+id/customizationAppIconColorHolder"
                         style="@style/SettingsHolderStyle"
-                        android:layout_below="@+id/customizationTextCursorColorHolder"
+                        android:layout_below="@+id/customizationTextCursorColorDivider"
                         android:layout_marginTop="-1dp">
 
                         <dev.widebars.commons.views.MyTextView

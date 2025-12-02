@@ -100,6 +100,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         //TODO HIDE
         binding.applyToAllHolder.beGone()
         binding.customizationAppIconColorHolder.beVisibleIf(getShowAppIconColor())
+        binding.customizationTextCursorColorDivider.beVisibleIf(getShowAppIconColor())
 
         initColorVariables()
         if (canAccessGlobalConfig()) {
@@ -139,6 +140,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         )
         updateApplyToAllColors()
         updateHoldersColor()
+        updateDividersColor()
 
         setupPurchaseThankYou()
         updateAutoThemeFields()
@@ -151,10 +153,28 @@ class CustomizationActivity : BaseSimpleActivity() {
         val color = getCurrentSurfaceColor()
         arrayOf(
             binding.themeHolder,
-            binding.primaryColorsHolder,
+//            binding.primaryColorsHolder,
             binding.colorsHolder
         ).forEach {
             it.setCardBackgroundColor(color)
+        }
+    }
+
+    private fun updateDividersColor() {
+        val color = getCurrentBackgroundColor()
+        binding.apply {
+            arrayOf(
+                customizationPrimaryColorDivider,
+                settingsTopAppBarColorIconDivider,
+                settingsTopAppBarColorTitleDivider,
+                customizationUseAccentColorDivider,
+                customizationAccentColorDivider,
+                customizationBackgroundColorDivider,
+                customizationTextColorDivider,
+                customizationTextCursorColorDivider,
+            ).forEach {
+                it.background.setTint(color)
+            }
         }
     }
 
@@ -346,6 +366,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         )
 
         updateHoldersColor()
+        updateDividersColor()
 
         hasUnsavedChanges = true
         refreshMenuItems()
@@ -675,6 +696,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         hasUnsavedChanges = true
         setupColorsPickers()
         refreshMenuItems()
+        updateDividersColor()
     }
 
     private fun setCurrentTextColor(color: Int) {
@@ -687,6 +709,7 @@ class CustomizationActivity : BaseSimpleActivity() {
         curBackgroundColor = color
         updateBackgroundColor(color)
         updateApplyToAllColors()
+        updateDividersColor()
     }
 
     private fun setCurrentPrimaryColor(color: Int) {
@@ -696,6 +719,7 @@ class CustomizationActivity : BaseSimpleActivity() {
 
     private fun handleAccentColorLayout() {
         binding.customizationAccentColorHolder.beVisibleIf(getShowAccentColor())
+        binding.customizationAccentColorDivider.beVisibleIf(getShowAccentColor())
         binding.customizationAccentColorLabel.text = getString(stringsR.string.accent_color)
     }
 
@@ -1057,6 +1081,7 @@ class CustomizationActivity : BaseSimpleActivity() {
     private fun setupUseAccentColor() {
         binding.apply {
             customizationUseAccentColorHolder.beVisibleIf(getShowAccentColor())
+            customizationUseAccentColorDivider.beVisibleIf(getShowAccentColor())
             updateTextColors(customizationUseAccentColorHolder)
             customizationUseAccentColor.isChecked = baseConfig.isUsingAccentColor
             customizationUseAccentColorHolder.setOnClickListener {

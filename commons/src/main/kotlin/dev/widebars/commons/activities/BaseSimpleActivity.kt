@@ -113,8 +113,7 @@ abstract class BaseSimpleActivity : EdgeToEdgeActivity() {
 
         if (isAutoTheme()) changeAutoTheme()
 
-        if (!packageName.startsWith("dev.widebars.", true) &&
-            !packageName.startsWith("dev.widebars.", true)
+        if (!packageName.startsWith("dev.widebars.", true)
         ) {
             if ((0..50).random() == 10 || baseConfig.appRunCount % 100 == 0) {
                 showModdedAppWarning()
@@ -703,7 +702,7 @@ abstract class BaseSimpleActivity : EdgeToEdgeActivity() {
                                    subscriptionYearIdListRu: ArrayList<String> = arrayListOf("", "", ""),
                                    showAppIconColor : Boolean = false
     ) {
-        if (!packageName.contains("ywdoog".reversed(), true)) {
+        if (!packageName.contains("srabediw".reversed(), true)) {
             if (baseConfig.appRunCount > 100) {
                 showModdedAppWarning()
                 return
@@ -748,7 +747,7 @@ abstract class BaseSimpleActivity : EdgeToEdgeActivity() {
     // synchronous return value determines only if we are showing the SAF dialog, callback result tells if the SD or OTG permission has been granted
     fun handleSAFDialog(path: String, callback: (success: Boolean) -> Unit): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("dev.widebars") && !packageName.startsWith("dev.widebars")) {
+        return if (!packageName.startsWith("dev.widebars")) {
             callback(true)
             false
         } else if (isShowingSAFDialog(path) || isShowingOTGDialog(path)) {
@@ -766,7 +765,7 @@ abstract class BaseSimpleActivity : EdgeToEdgeActivity() {
         callback: (success: Boolean) -> Unit
     ): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("dev.widebars") && !packageName.startsWith("dev.widebars")) {
+        return if (!packageName.startsWith("dev.widebars")) {
             callback(true)
             false
         } else if (isShowingSAFDialogSdk30(path, showRationale)) {
@@ -796,7 +795,7 @@ abstract class BaseSimpleActivity : EdgeToEdgeActivity() {
         callback: (success: Boolean) -> Unit
     ): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("dev.widebars") && !packageName.startsWith("dev.widebars")) {
+        return if (!packageName.startsWith("dev.widebars")) {
             callback(true)
             false
         } else if (isShowingSAFCreateDocumentDialogSdk30(path)) {
@@ -814,7 +813,7 @@ abstract class BaseSimpleActivity : EdgeToEdgeActivity() {
         callback: (success: Boolean) -> Unit
     ): Boolean {
         hideKeyboard()
-        return if (!packageName.startsWith("dev.widebars") && !packageName.startsWith("dev.widebars")) {
+        return if (!packageName.startsWith("dev.widebars")) {
             callback(true)
             false
         } else if (isShowingAndroidSAFDialog(path, openInSystemAppAllowed)) {
@@ -1386,7 +1385,7 @@ abstract class BaseSimpleActivity : EdgeToEdgeActivity() {
 
     private fun getExportSettingsFilename(): String {
         val appName = baseConfig.appId.removeSuffix(".debug").removeSuffix(".pro")
-            .removePrefix("dev.widebars.").removePrefix("dev.widebars.")
+            .removePrefix("dev.widebars.")
         return "$appName-settings_${getCurrentFormattedDateTime()}"
     }
 
