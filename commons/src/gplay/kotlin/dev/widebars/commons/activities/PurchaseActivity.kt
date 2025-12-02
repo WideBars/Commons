@@ -428,13 +428,13 @@ class PurchaseActivity : BaseSimpleActivity() {
 
         binding.widebarsLogo.apply {
             applyColorFilter(getProperTextColor())
-            setOnClickListener {
-                launchViewIntent(getString(R.string.my_website))
-            }
+//            setOnClickListener {
+//                launchViewIntent(getString(R.string.my_website))
+//            }
         }
-        binding.widebarsTitle.setOnClickListener {
-            launchViewIntent(getString(R.string.my_website))
-        }
+//        binding.widebarsTitle.setOnClickListener {
+//            launchViewIntent(getString(R.string.my_website))
+//        }
     }
 
     @SuppressLint("SetTextI18n")

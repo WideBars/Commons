@@ -286,7 +286,7 @@ internal fun AboutNewSection(
                         context= context,
                         text = "widebars.dev",
                         painter = painterResource(id = R.drawable.ic_widebars),
-                        onClick = {} //onWebsiteClick,
+                        onClick = onWebsiteClick,
                     )
                 }
             }
