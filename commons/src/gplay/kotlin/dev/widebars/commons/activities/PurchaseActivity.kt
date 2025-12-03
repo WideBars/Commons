@@ -36,6 +36,7 @@ class PurchaseActivity : BaseSimpleActivity() {
 
     private var appName = ""
     private var primaryColor = 0
+    private var surfaceColor = 0
     private var productIdList: ArrayList<String> = ArrayList()
     private var productIdListRu: ArrayList<String> = ArrayList()
     private var subscriptionIdList: ArrayList<String> = ArrayList()
@@ -67,6 +68,7 @@ class PurchaseActivity : BaseSimpleActivity() {
         subscriptionYearIdList = intent.getStringArrayListExtra(SUBSCRIPTION_YEAR_ID_LIST) ?: arrayListOf("", "", "")
         subscriptionYearIdListRu = intent.getStringArrayListExtra(SUBSCRIPTION_YEAR_ID_LIST_RU) ?: arrayListOf("", "", "")
         primaryColor = getProperPrimaryColor()
+        surfaceColor = getSurfaceColor()
         showLifebuoy = intent.getBooleanExtra(SHOW_LIFEBUOY, true)
         showCollection = intent.getBooleanExtra(SHOW_COLLECTION, false)
 
@@ -131,15 +133,7 @@ class PurchaseActivity : BaseSimpleActivity() {
         binding.purchaseAppBarLayout.setBackgroundColor(backgroundColor)
         binding.collapsingToolbar.setBackgroundColor(backgroundColor)
 
-        setupTheme()
-        setupEmail()
-
-        if (showCollection) setupCollection()
         setupIcon()
-
-        val isProApp = resources.getBoolean(R.bool.is_pro_app)
-        binding.themeHolder.beVisibleIf(!isProApp)
-        binding.colorHolder.beVisibleIf(!isProApp)
     }
 
     private fun setupOptionsMenu() {
@@ -160,40 +154,6 @@ class PurchaseActivity : BaseSimpleActivity() {
                     true
                 }
                 else -> false
-            }
-        }
-    }
-
-    private fun setupTheme() {
-        binding.themeHolder.setOnClickListener {
-            onThemeClick()
-        }
-    }
-
-    private fun setupEmail() {
-        binding.lifebuoyHolder.beVisibleIf(showLifebuoy)
-        val lifebuoyButtonDrawable =
-            resources.getColoredDrawableWithColor(this, R.drawable.ic_mail_vector, getProperTextColor())
-        binding.lifebuoyButton.setImageDrawable(lifebuoyButtonDrawable)
-        binding.lifebuoyButton.setOnClickListener {
-            ConfirmationDialog(this, getString(R.string.send_email)) {
-                val body = "$appName : Lifebuoy"
-                val address = getMyMailString()
-                val selectorIntent = Intent(ACTION_SENDTO)
-                    .setData("mailto:$address".toUri())
-                val emailIntent = Intent(ACTION_SEND).apply {
-                    putExtra(EXTRA_EMAIL, arrayOf(address))
-                    putExtra(EXTRA_SUBJECT, body)
-                    selector = selectorIntent
-                }
-
-                try {
-                    startActivity(emailIntent)
-                } catch (_: ActivityNotFoundException) {
-                    toast(R.string.no_app_found)
-                } catch (e: Exception) {
-                    showErrorToast(e)
-                }
             }
         }
     }
@@ -416,106 +376,21 @@ class PurchaseActivity : BaseSimpleActivity() {
 
     private fun setupIcon() {
         val appDrawable = resources.getColoredDrawableWithColor(this, R.drawable.ic_plus_support, primaryColor)
+        val appBg = resources.getColoredDrawableWithColor(this, R.drawable.squircle_bg, surfaceColor)
         binding.topDetails.appLogo.setImageDrawable(appDrawable)
-        val themeDrawable = resources.getColoredDrawableWithColor(this, R.drawable.ic_invert_colors, primaryColor)
-        binding.themeLogo.setImageDrawable(themeDrawable)
-        val colorDrawable = resources.getColoredDrawableWithColor(this, R.drawable.ic_palette, primaryColor)
-        binding.colorLogo.setImageDrawable(colorDrawable)
-        val plusDrawable = resources.getColoredDrawableWithColor(this, R.drawable.ic_plus_round, primaryColor)
-        binding.plusLogo.setImageDrawable(plusDrawable)
-        val lifebuoyDrawable = resources.getColoredDrawableWithColor(this, R.drawable.ic_lifebuoy, primaryColor)
-        binding.lifebuoyLogo.setImageDrawable(lifebuoyDrawable)
+        binding.topDetails.appLogo.background = appBg
+
 
         binding.widebarsLogo.apply {
             applyColorFilter(getProperTextColor())
-//            setOnClickListener {
+            setOnClickListener {
 //                launchViewIntent(getString(R.string.my_website))
-//            }
+                onThemeClick()
+            }
         }
-//        binding.widebarsTitle.setOnClickListener {
+        binding.widebarsTitle.setOnClickListener {
 //            launchViewIntent(getString(R.string.my_website))
-//        }
-    }
-
-    @SuppressLint("SetTextI18n")
-    private fun setupCollection() {
-        binding.collectionHolder.beVisible()
-        val prefix = appPrefix()
-        val appDialerPackage = prefix + "widebars.dialer"
-        val appContactsPackage = prefix + "widebars.contacts"
-        val appSmsMessengerPackage = prefix + "widebars.smsmessenger"
-        val appGalleryPackage = prefix + "widebars.gallery"
-        val appAudiobookLitePackage = prefix + "widebars.audiobooklite"
-        val appFilesPackage = prefix + "widebars.filemanager"
-        val appKeyboardPackage = prefix + "widebars.keyboard"
-        val appCalendarPackage = prefix + "widebars.calendar"
-//        val appVoiceRecorderPackage = prefix + "widebars.voicerecorderfree"
-
-        val appDialerInstalled = isPackageInstalled(appDialerPackage)
-        val appContactsInstalled = isPackageInstalled(appContactsPackage)
-        val appSmsMessengerInstalled = isPackageInstalled(appSmsMessengerPackage)
-        val appGalleryInstalled = isPackageInstalled(appGalleryPackage)
-        val appAudiobookLiteInstalled = isPackageInstalled(appAudiobookLitePackage)
-        val appFilesInstalled = isPackageInstalled(appFilesPackage)
-        val appKeyboardInstalled = isPackageInstalled(appKeyboardPackage)
-        val appCalendarInstalled = isPackageInstalled(appCalendarPackage)
-//        val appVoiceRecorderInstalled = isPackageInstalled(appVoiceRecorderPackage)
-
-        val appAllInstalled = appDialerInstalled && appContactsInstalled && appSmsMessengerInstalled && appGalleryInstalled &&
-            appAudiobookLiteInstalled && appFilesInstalled && appKeyboardInstalled && appCalendarInstalled //&& appVoiceRecorderInstalled
-
-        if (!appAllInstalled) binding.collectionLogo.applyColorFilter(primaryColor)
-        binding.collectionChevron.applyColorFilter(getProperTextColor())
-        binding.collectionSubtitle.background.applyColorFilter(getSurfaceColor())
-
-        val items = arrayOf(
-            SimpleListItem(1, R.string.right_dialer, imageRes = R.drawable.ic_dialer, selected = appDialerInstalled, packageName = appDialerPackage),
-            SimpleListItem(2, R.string.right_contacts, imageRes = R.drawable.ic_contacts, selected = appContactsInstalled, packageName = appContactsPackage),
-            SimpleListItem(3, R.string.right_sms_messenger, imageRes = R.drawable.ic_sms_messenger, selected = appSmsMessengerInstalled, packageName = appSmsMessengerPackage),
-            SimpleListItem(4, R.string.right_gallery, imageRes = R.drawable.ic_gallery, selected = appGalleryInstalled, packageName = appGalleryPackage),
-            SimpleListItem(5, R.string.right_files, imageRes = R.drawable.ic_files, selected = appFilesInstalled, packageName = appFilesPackage),
-            SimpleListItem(6, R.string.playbook, imageRes = R.drawable.ic_playbook, selected = appAudiobookLiteInstalled, packageName = appAudiobookLitePackage),
-            SimpleListItem(7, R.string.right_keyboard, imageRes = R.drawable.ic_inkwell, selected = appKeyboardInstalled, packageName = appKeyboardPackage),
-            SimpleListItem(8, R.string.right_calendar, imageRes = R.drawable.ic_calendar_app, selected = appCalendarInstalled, packageName = appCalendarPackage),
-            //SimpleListItem(9, R.string.right_voice_recorder, imageRes = R.drawable.ic_voice_recorder, selected = appVoiceRecorderInstalled, packageName = appVoiceRecorderPackage)
-        )
-
-        val percentage = items.filter { it.selected }.size.toString() + "/" + items.size.toString()
-        binding.collectionTitle.text = getString(stringsR.string.collection) + "  $percentage"
-
-        binding.collectionHolder.setOnClickListener {
-            BottomSheetChooserDialog.createChooser(
-                fragmentManager = supportFragmentManager,
-                title = stringsR.string.collection,
-                items = items,
-                collection = true
-            ) {
-                if (it.selected) {
-                    launchApp(it.packageName)
-                } else {
-                    val urlGP = "https://play.google.com/store/apps/details?id=${it.packageName}"
-                    launchViewIntent(urlGP)
-                }
-            }
-        }
-    }
-
-    private fun launchApp(packageName: String) {
-        try {
-            Intent(ACTION_MAIN).apply {
-                addCategory(CATEGORY_LAUNCHER)
-                `package` = packageName
-                //component = ComponentName.unflattenFromString("$packageName/")
-                addFlags(FLAG_RECEIVER_FOREGROUND)
-                startActivity(this)
-            }
-        } catch (_: Exception) {
-            try {
-                val launchIntent = packageManager.getLaunchIntentForPackage(packageName)
-                startActivity(launchIntent)
-            } catch (e: Exception) {
-                showErrorToast(e)
-            }
+            onThemeClick()
         }
     }
 

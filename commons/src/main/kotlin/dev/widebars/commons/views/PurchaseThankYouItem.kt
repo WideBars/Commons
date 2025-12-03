@@ -14,6 +14,7 @@ import dev.widebars.commons.extensions.getColoredDrawableWithColor
 import dev.widebars.commons.extensions.getProperBackgroundColor
 import dev.widebars.commons.extensions.getProperPrimaryColor
 import dev.widebars.commons.extensions.getProperTextColor
+import dev.widebars.commons.extensions.getSurfaceColor
 
 class PurchaseThankYouItem @JvmOverloads constructor(
     context: Context,
@@ -61,11 +62,15 @@ class PurchaseThankYouItem @JvmOverloads constructor(
 
     fun updateVisibility() {
         val appDrawable = context.resources.getColoredDrawableWithColor(context, R.drawable.ic_plus_support, context.getProperPrimaryColor())
-        findViewById<ImageView>(R.id.purchase_logo).setImageDrawable(appDrawable)
+        val appBg = context.resources.getColoredDrawableWithColor(context, R.drawable.button_white_bg_24dp, context.getSurfaceColor())
+        findViewById<ImageView>(R.id.purchase_logo).apply {
+            setImageDrawable(appDrawable)
+            background = appBg
+        }
         val drawable = context.resources.getColoredDrawableWithColor(context, R.drawable.button_gray_bg, context.getProperPrimaryColor())
         findViewById<AppCompatButton>(R.id.purchase_thank_you_more).apply {
             background = drawable
-            setTextColor(context.getProperBackgroundColor())
+            setTextColor(context.getProperTextColor())
             setPadding(2, 2, 2, 2)
         }
 
