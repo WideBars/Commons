@@ -49,13 +49,11 @@ android {
     productFlavors {
         create("gplay") { dimension = "distribution" }
         create("foss") { dimension = "distribution" }
-        create("rustore") { dimension = "distribution" }
     }
 
     publishing {
         singleVariant("gplayRelease") {}
         singleVariant("fossRelease") {}
-        singleVariant("rustoreRelease") {}
     }
 
     buildFeatures {
@@ -123,17 +121,6 @@ afterEvaluate {
                     dependsOn(tasks.named("assembleFossRelease"))
                 }
             }
-
-            create<MavenPublication>("rustoreRelease") {
-                groupId = "com.github.widebars.commons"
-                artifactId = "commons-rustore"
-                version = project.version.toString()
-                from(components.getByName("rustoreRelease"))
-                artifact(sourcesJar.get())
-                tasks.named("publishRustoreReleasePublicationToMavenLocal") {
-                    dependsOn(tasks.named("assembleRustoreRelease"))
-                }
-            }
         }
     }
 }
@@ -182,7 +169,6 @@ dependencies {
     //WideBars
     api(projects.strings)
     "gplayImplementation"(libs.billing.client)
-    "rustoreImplementation"(libs.rustore.client)
     api(libs.persian.date)
     implementation(libs.behavio.rule)
     implementation(libs.rx.animation)

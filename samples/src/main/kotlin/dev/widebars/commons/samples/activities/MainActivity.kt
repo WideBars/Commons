@@ -132,7 +132,6 @@ class MainActivity : BaseSimpleActivity() {
         val storeDisplayName = when (flavorName) {
             "gplay" -> "Google Play"
             "foss" -> "FOSS"
-            "rustore" -> "RuStore"
             else -> ""
         }
         val versionName = BuildConfig.VERSION_NAME

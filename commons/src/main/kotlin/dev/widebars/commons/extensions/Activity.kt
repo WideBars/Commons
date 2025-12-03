@@ -88,7 +88,7 @@ fun Activity.appLaunched(appId: String) {
     if (!baseConfig.wasAppRated) {
         if (!isTalkBackOn()) {
             if (baseConfig.appRunCount % 40 == 0) {
-                if (isPlayStoreInstalled() || isRuStoreInstalled()) RateStarsDialog(this)
+                if (isPlayStoreInstalled()) RateStarsDialog(this)
             }
         }
     }
@@ -352,7 +352,6 @@ fun BaseSimpleActivity.showOTGPermissionDialog(path: String) {
 fun Activity.launchMoreAppsFromUsIntent(appFlavor: String = "gplay") {
     when (appFlavor) {
         "foss" -> launchViewIntent(getString(R.string.github_dev_url))
-        "rustore" -> launchViewIntent("rustore://apps.rustore.ru/developer/d01f495d")
         else -> launchViewIntent(getString(googlePlayDevUrlRes()))
     }
 }

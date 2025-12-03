@@ -212,7 +212,6 @@ class AboutActivity : BaseComposeActivity() {
     private fun onInviteClick() {
         val storeUrl = when(getFlavorName()) {
             "foss" -> getGithubUrl()
-            "rustore" -> getRuStoreUrl()
             else -> getStoreUrl()
         }
 

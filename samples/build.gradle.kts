@@ -62,9 +62,6 @@ android {
         create("foss") {
             dimension = "distribution"
         }
-        create("rustore") {
-            dimension = "distribution"
-        }
     }
 
     compileOptions {

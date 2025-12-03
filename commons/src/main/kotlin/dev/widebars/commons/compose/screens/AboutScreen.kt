@@ -195,7 +195,7 @@ internal fun AboutNewSection(
             Spacer(modifier = Modifier.size(8.dp))
             HtmlText(stringResource(stringsR.string.about_summary), textColor = textColor)
             Spacer(modifier = Modifier.size(24.dp))
-            if (appFlavor == "gplay" || appFlavor == "rustore") {
+            if (appFlavor == "gplay") {
                 AboutItem(
                     text = stringResource(stringsR.string.rate_g),
                     imageVector = Icons.Rounded.Star,
@@ -216,7 +216,6 @@ internal fun AboutNewSection(
                 painter = painterResource(
                     id = when (appFlavor) {
                         "foss" -> R.drawable.ic_github_vector
-                        "rustore" -> R.drawable.ic_rustore
                         else -> R.drawable.ic_google_play_vector
                     }
                 ),
