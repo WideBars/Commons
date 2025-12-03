@@ -63,6 +63,13 @@
     <color name="default_widget_text_color">@color/theme_light_text_color</color>
     <color name="default_widget_label_color">#FFFFFFFF</color>
 
+    <!-- Recent Default colors -->
+    <color name="default_recent_1">#FF0B84FE</color>
+    <color name="default_recent_2">#FFBF5AF3</color>
+    <color name="default_recent_3">#FFFF5713</color>
+    <color name="default_recent_4">#FFFECB00</color>
+    <color name="default_recent_5">#FF2ED158</color>
+
     <!-- Primary colors -->
     <color name="md_amber">#FFC107</color>
     <color name="md_blue">#2196F3</color>

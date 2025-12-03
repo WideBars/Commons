@@ -380,9 +380,17 @@ class PurchaseActivity : BaseSimpleActivity() {
         binding.topDetails.appLogo.setImageDrawable(appDrawable)
         binding.topDetails.appLogo.background = appBg
 
+        val textColor = getProperTextColor()
+        binding.appOne.background.setTint(surfaceColor)
+        binding.appOneName.setTextColor(textColor)
+        binding.appTwo.background.setTint(surfaceColor)
+        binding.appTwoName.setTextColor(textColor)
+        binding.appThree.background.setTint(surfaceColor)
+        binding.appThreeName.setTextColor(textColor)
+
 
         binding.widebarsLogo.apply {
-            applyColorFilter(getProperTextColor())
+            applyColorFilter(textColor)
             setOnClickListener {
 //                launchViewIntent(getString(R.string.my_website))
                 onThemeClick()
