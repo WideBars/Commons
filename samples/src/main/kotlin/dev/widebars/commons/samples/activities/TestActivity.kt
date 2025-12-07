@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import dev.widebars.commons.activities.BaseSimpleActivity
+import dev.widebars.commons.adapters.MyRecyclerViewAdapter
 import dev.widebars.commons.compose.extensions.config
 import dev.widebars.commons.dialogs.WhatsNewDialog
 import dev.widebars.commons.extensions.*
@@ -33,6 +34,15 @@ class TestActivity : BaseSimpleActivity() {
             itemClick = {}
         )
 
+        (recyclerView.adapter as MyRecyclerViewAdapter).setVerticalDividers(
+            visible = true,
+            paddingStartDp = 16,  // left padding 16dp
+            paddingEndDp = 16,    // right padding 16dp
+            dividerHeightDp = 1,  // height 1dp
+        )
+
+        (recyclerView.adapter as MyRecyclerViewAdapter).addBottomPadding(128)
+
         binding.mainMenu.updateTitle(getAppLauncherName())
         scrollChange()
     }
@@ -43,6 +53,11 @@ class TestActivity : BaseSimpleActivity() {
             background = getStartRequiredStatusBarColor(),
             scrollOffset = scrollingView?.computeVerticalScrollOffset() ?: 0
         )
+    }
+
+    override fun onDestroy() {
+        (binding.recyclerView.adapter as MyRecyclerViewAdapter).cleanup()
+        super.onDestroy()
     }
 
     private fun scrollChange() {

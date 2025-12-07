@@ -58,6 +58,7 @@ import androidx.biometric.BiometricManager
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.toColorInt
 import androidx.core.net.toUri
 import androidx.core.os.bundleOf
 import androidx.core.text.BidiFormatter
@@ -1583,4 +1584,12 @@ fun Context.myMailRes(): Int {
 
 fun Context.getMyMailString(): String {
     return getString(myMailRes())
+}
+
+fun Context.getDividerColor(): Int {
+    return if (isDarkTheme() && (isSystemInDarkMode() || isAutoTheme())) {
+        "#444444".toColorInt()
+    } else {
+        "#E0E0E0".toColorInt()
+    }
 }

@@ -18,6 +18,8 @@ import dev.widebars.commons.helpers.CONTACT_THUMBNAILS_SIZE_LARGE
 import dev.widebars.commons.helpers.CONTACT_THUMBNAILS_SIZE_SMALL
 import dev.widebars.commons.interfaces.MyActionModeCallback
 import dev.widebars.commons.models.RecyclerSelectionPayload
+import dev.widebars.commons.views.BottomPaddingDecoration
+import dev.widebars.commons.views.MyDividerDecoration
 import dev.widebars.commons.views.MyRecyclerView
 import kotlin.math.max
 import kotlin.math.min
@@ -46,6 +48,10 @@ abstract class MyRecyclerViewListAdapter<T>(
 
     private var actBarTextView: TextView? = null
     private var lastLongPressedItem = -1
+
+    private var isDividersVisible = false
+    private var dividerDecoration: MyDividerDecoration? = null
+    private var bottomPaddingDecoration: BottomPaddingDecoration? = null
 
     abstract fun getActionMenuId(): Int
 
@@ -111,21 +117,21 @@ abstract class MyRecyclerViewListAdapter<T>(
                 onActionModeCreated()
 
                 //if (activity.isDynamicTheme()) {
-                    actBarTextView?.onGlobalLayout {
-                        val backArrow = activity.findViewById<ImageView>(androidx.appcompat.R.id.action_mode_close_button)
-                        backArrow?.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron_left_vector, activity.theme))
-                        backArrow?.applyColorFilter(cabContrastColor)
+                actBarTextView?.onGlobalLayout {
+                    val backArrow = activity.findViewById<ImageView>(androidx.appcompat.R.id.action_mode_close_button)
+                    backArrow?.setImageDrawable(resources.getDrawable(R.drawable.ic_chevron_left_vector, activity.theme))
+                    backArrow?.applyColorFilter(cabContrastColor)
 
-                        val cabView = backArrow?.parent as? ViewGroup
-                        for (i in 0 until (cabView?.childCount ?: 0)) {
-                            val child = cabView?.getChildAt(i)
-                            if (child is ActionMenuView) {
-                                // Colouring the overflow icon (three dots)
-                                child.overflowIcon?.applyColorFilter(cabContrastColor)
-                                break
-                            }
+                    val cabView = backArrow?.parent as? ViewGroup
+                    for (i in 0 until (cabView?.childCount ?: 0)) {
+                        val child = cabView?.getChildAt(i)
+                        if (child is ActionMenuView) {
+                            // Colouring the overflow icon (three dots)
+                            child.overflowIcon?.applyColorFilter(cabContrastColor)
+                            break
                         }
                     }
+                }
                 //}
                 return true
             }
@@ -306,16 +312,93 @@ abstract class MyRecyclerViewListAdapter<T>(
         recyclerView.setupZoomListener(zoomListener)
     }
 
-    fun addVerticalDividers(add: Boolean) {
-        if (recyclerView.itemDecorationCount > 0) {
-            recyclerView.removeItemDecorationAt(0)
+//    fun addVerticalDividers(add: Boolean) {
+//        if (recyclerView.itemDecorationCount > 0) {
+//            recyclerView.removeItemDecorationAt(0)
+//        }
+//
+//        if (add) {
+//            DividerItemDecoration(activity, DividerItemDecoration.VERTICAL).apply {
+//                ContextCompat.getDrawable(activity, R.drawable.divider)?.let {
+//                    setDrawable(it)
+//                }
+//                recyclerView.addItemDecoration(this)
+//            }
+//        }
+//    }
+
+    /**
+     * Vertical separator between elements.
+     *
+     * @param visible Enabled.
+     * @param paddingStartDp Left padding in Dp.
+     * @param paddingEndDp Right padding in Dp.
+     * @param dividerHeightDp Height of the divider in Dp.
+     */
+    fun setVerticalDividers(
+        visible: Boolean,
+        paddingStartDp: Int = 0,
+        paddingEndDp: Int = 0,
+        dividerHeightDp: Int = 1,
+        color: Int = 0x33AAAAAA, // activity.getDividerColor(),
+    ) {
+        // Remove the old separator
+        dividerDecoration?.let {
+            recyclerView.removeItemDecoration(it)
+            dividerDecoration = null
         }
 
-        if (add) {
-            DividerItemDecoration(activity, DividerItemDecoration.VERTICAL).apply {
-                setDrawable(resources.getDrawable(R.drawable.divider, activity.theme))
-                recyclerView.addItemDecoration(this)
+        if (visible) {
+            // Create or reuse a separator
+            val decoration = MyDividerDecoration().apply {
+                setConfiguration(
+                    paddingStartDp = paddingStartDp,
+                    paddingEndDp = paddingEndDp,
+                    dividerHeightDp = dividerHeightDp,
+                    color = color,
+                    context = activity
+                )
+                setVisible(true)
             }
+
+            recyclerView.addItemDecoration(decoration)
+            dividerDecoration = decoration
+            isDividersVisible = true
+        } else {
+            isDividersVisible = false
+        }
+    }
+
+    /**
+     * Creates the bottom margin of the adapter.
+     * If there is no scrollbar in the Adapter, it is better to use:
+     * ```
+     *         android:scrollbars=“vertical”
+     *         android:clipToPadding=“false”
+     *         android:paddingBottom=“128dp”
+     * ```
+     *
+     * @param bottomPaddingDp Height of the setback in Dp.
+     */
+    fun addBottomPadding(bottomPaddingDp: Int) {
+        // Remove the old indent if there is one
+        bottomPaddingDecoration?.let {
+            recyclerView.removeItemDecoration(it)
+            bottomPaddingDecoration = null
+        }
+
+        if (bottomPaddingDp > 0) {
+            // Convert dp to pixels
+            val paddingPx = bottomPaddingDp.dpToPx(activity)
+
+            // Create and add decoration
+            BottomPaddingDecoration(paddingPx).apply {
+                recyclerView.addItemDecoration(this)
+                bottomPaddingDecoration = this
+            }
+
+            // Updating display
+            recyclerView.invalidateItemDecorations()
         }
     }
 
@@ -404,6 +487,20 @@ abstract class MyRecyclerViewListAdapter<T>(
 
             toggleItemSelection(true, currentPosition, true)
             itemLongClicked(currentPosition)
+        }
+    }
+
+    // Cleaning resources
+    fun cleanup() {
+        dividerDecoration?.let {
+            recyclerView.removeItemDecoration(it)
+            dividerDecoration = null
+        }
+        MyDividerDecoration.clearCache()
+
+        bottomPaddingDecoration?.let {
+            recyclerView.removeItemDecoration(it)
+            bottomPaddingDecoration = null
         }
     }
 }
