@@ -275,7 +275,7 @@ fun SimpleLazyListScaffold(
 @Composable
 fun SimpleScaffold(
     modifier: Modifier = Modifier,
-    darkStatusBarIcons: Boolean = true,
+    darkStatusBarIcons: Boolean? = null,
     customTopBar: @Composable (scrolledColor: Color, navigationInteractionSource: MutableInteractionSource, scrollBehavior: TopAppBarScrollBehavior, statusBarColor: Int, colorTransitionFraction: Float, contrastColor: Color) -> Unit,
     customContent: @Composable (BoxScope.(PaddingValues) -> Unit)
 ) {
@@ -283,10 +283,11 @@ fun SimpleScaffold(
 
     val (statusBarColor, contrastColor) = statusBarAndContrastColor(context)
     val scrollBehavior = TopAppBarDefaults.pinnedScrollBehavior(rememberTopAppBarState())
+    val mDarkStatusBarIcons = darkStatusBarIcons ?: !contrastColor.isLitWell()
     val (colorTransitionFraction, scrolledColor) = transitionFractionAndScrolledColor(
         scrollBehavior,
         contrastColor,
-        darkStatusBarIcons
+        mDarkStatusBarIcons
     )
     SystemUISettingsScaffoldStatusBarColor(scrolledColor)
     val navigationIconInteractionSource = rememberMutableInteractionSource()

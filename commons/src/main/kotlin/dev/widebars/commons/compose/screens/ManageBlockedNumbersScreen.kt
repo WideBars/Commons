@@ -4,11 +4,13 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.animation.Crossfade
 import androidx.compose.animation.core.FastOutLinearInEasing
 import androidx.compose.animation.core.tween
+import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -16,14 +18,11 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ContentCopy
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.MoreVert
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
@@ -52,7 +51,7 @@ import dev.widebars.commons.compose.menus.ActionMenu
 import dev.widebars.commons.compose.menus.OverflowMode
 import dev.widebars.commons.compose.settings.SettingsSwitchComponent
 import dev.widebars.commons.compose.lists.*
-import dev.widebars.commons.compose.settings.SettingsHorizontalDivider
+import dev.widebars.commons.compose.settings.SettingsGroup
 import dev.widebars.commons.compose.settings.SettingsPreferenceComponent
 import dev.widebars.commons.compose.system_ui_controller.rememberSystemUiController
 import dev.widebars.commons.compose.theme.*
@@ -111,7 +110,7 @@ internal fun ManageBlockedNumbersScreen(
     }
 
     SimpleScaffold(
-        darkStatusBarIcons = !isInActionMode,
+//        darkStatusBarIcons = !isInActionMode,
         customTopBar = {
                 scrolledColor: Color,
                 navigationInteractionSource: MutableInteractionSource,
@@ -204,76 +203,78 @@ internal fun ManageBlockedNumbersScreen(
             verticalArrangement = Arrangement.spacedBy(SimpleTheme.dimens.padding.extraSmall),
             contentPadding = PaddingValues(bottom = paddingValues.calculateBottomPadding())
         ) {
-            item {
-                if (isDialer) SettingsSwitchComponent(
-                    label = stringResource(id = dev.widebars.strings.R.string.enable_blocking),
-                    value = stringResource(id = dev.widebars.strings.R.string.enable_blocking_summary),
-                    initialValue = isBlockingEnabled,
-                    onChange = onBlockingEnabledChange,
-                    modifier = Modifier.topAppBarPaddings(),
-                    scaleSwitch = 0.8F,
-                    showCheckmark = showCheckmarksOnSwitches,
-                    checkmark = ImageVector.vectorResource(R.drawable.ic_check),
-                    backgroundColor = MaterialTheme.colorScheme.background
-                )
-                SettingsSwitchComponent(
-                    label =
-                        if (isDialer) stringResource(id = R.string.block_unknown_calls)
-                        else stringResource(id = R.string.block_unknown_messages),
-                    value =
-                        if (isDialer) stringResource(id = dev.widebars.strings.R.string.block_unknown_calls_summary)
-                        else null,
-                    initialValue = isBlockUnknownSelected,
-                    onChange = onBlockUnknownSelectedChange,
-                    modifier = Modifier.topAppBarPaddings(),
-                    isPreferenceEnabled = isBlockingEnabled || !isDialer,
-                    scaleSwitch = 0.8F,
-                    showCheckmark = showCheckmarksOnSwitches,
-                    checkmark = ImageVector.vectorResource(R.drawable.ic_no_accounts),
-                    backgroundColor = MaterialTheme.colorScheme.background
-                )
-                // Not used for messages
-                if (isDialer) SettingsSwitchComponent(
-                    label = stringResource(id = R.string.block_hidden_calls),
-                    initialValue = isHiddenSelected,
-                    onChange = onHiddenSelectedChange,
-                    modifier = Modifier.topAppBarPaddings(),
-                    isPreferenceEnabled = isBlockingEnabled,
-                    scaleSwitch = 0.8F,
-                    showCheckmark = showCheckmarksOnSwitches,
-                    checkmark = ImageVector.vectorResource(R.drawable.ic_question),
-                    backgroundColor = MaterialTheme.colorScheme.background
-                )
-                if (isDialer) SettingsPreferenceComponent(
-                    label = stringResource(id = dev.widebars.strings.R.string.blocking_type),
-                    sublabel = when (isBlockingType) {
-                        BLOCKING_TYPE_DO_NOT_REJECT -> stringResource(id = dev.widebars.strings.R.string.blocking_type_do_not_reject_summary)
-                        BLOCKING_TYPE_SILENCE -> stringResource(id = dev.widebars.strings.R.string.blocking_type_silence_summary)
-                        else -> stringResource(id = dev.widebars.strings.R.string.blocking_type_reject_summary)
-
-                    },
-                    value = when (isBlockingType) {
-                        BLOCKING_TYPE_DO_NOT_REJECT -> stringResource(id = dev.widebars.strings.R.string.blocking_type_do_not_reject)
-                        BLOCKING_TYPE_SILENCE -> stringResource(id = dev.widebars.strings.R.string.blocking_type_silence)
-                        else -> stringResource(id = dev.widebars.strings.R.string.blocking_type_reject)
-
-                    },
-                    isPreferenceEnabled = isBlockingEnabled && (isBlockUnknownSelected || isHiddenSelected),
-                    doOnPreferenceClick = onBlockingType,
-                    backgroundColor = MaterialTheme.colorScheme.background
-                )
-                Spacer(modifier = Modifier.size(8.dp))
-                SettingsHorizontalDivider(
-                    modifier = Modifier.padding(horizontal = 20.dp),
-                    color = divider_grey
-                )
-                Column(modifier = Modifier.padding(horizontal = 20.dp)) {
-                    Text(
-                        modifier = Modifier.padding(top = 16.dp),
-                        text = stringResource(id = R.string.blocked_numbers)
+            if (isDialer) item {
+                SettingsGroup {
+                    SettingsSwitchComponent(
+                        label = stringResource(id = dev.widebars.strings.R.string.enable_blocking),
+                        value = stringResource(id = dev.widebars.strings.R.string.enable_blocking_summary),
+                        initialValue = isBlockingEnabled,
+                        onChange = onBlockingEnabledChange,
+                        modifier = Modifier.topAppBarPaddings(),
+                        scaleSwitch = 0.8F,
+                        showCheckmark = showCheckmarksOnSwitches,
+                        checkmark = ImageVector.vectorResource(R.drawable.ic_check),
                     )
+                }
+            }
+
+            item {
+                SettingsGroup {
+                    SettingsSwitchComponent(
+                        label =
+                            if (isDialer) stringResource(id = R.string.block_unknown_calls)
+                            else stringResource(id = R.string.block_unknown_messages),
+                        value =
+                            if (isDialer) stringResource(id = dev.widebars.strings.R.string.block_unknown_calls_summary)
+                            else null,
+                        initialValue = isBlockUnknownSelected,
+                        onChange = onBlockUnknownSelectedChange,
+                        modifier = Modifier.topAppBarPaddings(),
+                        isPreferenceEnabled = isBlockingEnabled || !isDialer,
+                        scaleSwitch = 0.8F,
+                        showCheckmark = showCheckmarksOnSwitches,
+                        checkmark = ImageVector.vectorResource(R.drawable.ic_no_accounts),
+                    )
+                    // Not used for messages
+                    if (isDialer) SettingsSwitchComponent(
+                        label = stringResource(id = R.string.block_hidden_calls),
+                        initialValue = isHiddenSelected,
+                        onChange = onHiddenSelectedChange,
+                        modifier = Modifier.topAppBarPaddings(),
+                        isPreferenceEnabled = isBlockingEnabled,
+                        scaleSwitch = 0.8F,
+                        showCheckmark = showCheckmarksOnSwitches,
+                        checkmark = ImageVector.vectorResource(R.drawable.ic_question),
+                    )
+                    if (isDialer) SettingsPreferenceComponent(
+                        label = stringResource(id = dev.widebars.strings.R.string.blocking_type),
+                        sublabel = when (isBlockingType) {
+                            BLOCKING_TYPE_DO_NOT_REJECT -> stringResource(id = dev.widebars.strings.R.string.blocking_type_do_not_reject_summary)
+                            BLOCKING_TYPE_SILENCE -> stringResource(id = dev.widebars.strings.R.string.blocking_type_silence_summary)
+                            else -> stringResource(id = dev.widebars.strings.R.string.blocking_type_reject_summary)
+
+                        },
+                        value = when (isBlockingType) {
+                            BLOCKING_TYPE_DO_NOT_REJECT -> stringResource(id = dev.widebars.strings.R.string.blocking_type_do_not_reject)
+                            BLOCKING_TYPE_SILENCE -> stringResource(id = dev.widebars.strings.R.string.blocking_type_silence)
+                            else -> stringResource(id = dev.widebars.strings.R.string.blocking_type_reject)
+
+                        },
+                        isPreferenceEnabled = isBlockingEnabled && (isBlockUnknownSelected || isHiddenSelected),
+                        doOnPreferenceClick = onBlockingType,
+                    )
+                }
+            }
+            item {
+                Spacer(modifier = Modifier.size(8.dp))
+                SettingsGroup(
+                    title = { Text(text = stringResource(id = R.string.blocked_numbers).uppercase()) }
+                ) {
+                    val bottomPadding = if (!isDialer) 8.dp else 4.dp
                     Text(
-                        modifier = Modifier.padding(bottom = 8.dp),
+                        modifier = Modifier
+                            .background(color = MaterialTheme.colorScheme.surface)
+                            .padding(start = 22.dp, end = 22.dp, top = 8.dp, bottom = bottomPadding),
                         fontSize = 12.sp,
                         lineHeight = 14.sp,
                         color = preferenceValueColor(isEnabled = true),
@@ -281,18 +282,18 @@ internal fun ManageBlockedNumbersScreen(
                             if (isBlockingEnabled || !isDialer) stringResource(id = dev.widebars.strings.R.string.сalls_and_messages_blocked_warning)
                             else stringResource(id = dev.widebars.strings.R.string.messages_blocked_warning)
                     )
+                    if (isDialer) SettingsSwitchComponent(
+                        label = stringResource(id = dev.widebars.strings.R.string.is_do_not_block_contacts_and_recent),
+                        initialValue = isDoNotBlockContactsAndRecent,
+                        onChange = onDoNotBlockContactsAndRecentChange,
+                        modifier = Modifier.topAppBarPaddings(),
+                        isPreferenceEnabled = isBlockingEnabled,
+                        scaleSwitch = 0.8F,
+                        showCheckmark = showCheckmarksOnSwitches,
+                        checkmark = ImageVector.vectorResource(R.drawable.ic_check),
+                    )
                 }
-                if (isDialer) SettingsSwitchComponent(
-                    label = stringResource(id = dev.widebars.strings.R.string.is_do_not_block_contacts_and_recent),
-                    initialValue = isDoNotBlockContactsAndRecent,
-                    onChange = onDoNotBlockContactsAndRecentChange,
-                    modifier = Modifier.topAppBarPaddings(),
-                    isPreferenceEnabled = isBlockingEnabled,
-                    scaleSwitch = 0.8F,
-                    showCheckmark = showCheckmarksOnSwitches,
-                    checkmark = ImageVector.vectorResource(R.drawable.ic_check),
-                    backgroundColor = MaterialTheme.colorScheme.background
-                )
+                Spacer(modifier = Modifier.size(10.dp))
             }
             when {
                 !hasGivenPermissionToBlock -> {
@@ -306,6 +307,36 @@ internal fun ManageBlockedNumbersScreen(
                 }
 
                 hasGivenPermissionToBlock && blockedNumbers.isNotEmpty() -> {
+                    item {
+                        Surface(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp, vertical = 12.dp)
+                                .clickable { onAdd() },
+                            color = SimpleTheme.colorScheme.background,
+                            tonalElevation = 0.dp
+                        ) {
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth(),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Add,
+                                    contentDescription = null,
+                                    tint = SimpleTheme.colorScheme.primary,
+                                    modifier = Modifier.size(24.dp)
+                                )
+                                Spacer(modifier = Modifier.width(12.dp))
+                                Text(
+                                    modifier = Modifier.weight(1f),
+                                    text = stringResource(id = R.string.add_a_blocked_number),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = SimpleTheme.colorScheme.primary
+                                )
+                            }
+                        }
+                    }
                     itemsIndexed(blockedNumbers, key = { _, blockedNumber -> blockedNumber.id }) { index, blockedNumber ->
                         val isSelected = selectedIds.value.contains(blockedNumber.id)
                         BlockedNumber(
@@ -420,47 +451,151 @@ private fun BlockedNumber(
     isBlockingEnabled: Boolean = true,
 ) {
     val hasContactName = blockedNumber.contactName != null
-    val contactNameContent = remember {
-        movableContentOf {
-            Text(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                text = blockedNumber.contactName.toString(),
-            )
+
+    val containerColor = if (isSelected) {
+        if (LocalTheme.current is Theme.SystemDefaultMaterialYou) {
+            Color(SimpleTheme.colorScheme.primaryContainer.toArgb().darkenColor()).copy(alpha = 0.8f)
+        } else {
+            SimpleTheme.colorScheme.primary.copy(alpha = 0.3f)
         }
+    } else {
+        SimpleTheme.colorScheme.background
     }
-    val blockedNumberContent = remember {
-        movableContentOf {
-            BlockedNumberHeadlineContent(
-                modifier = Modifier.padding(horizontal = 8.dp),
-                blockedNumber = blockedNumber,
-                hasContactName = hasContactName)
-        }
-    }
-    ListItem(
+
+    val trailingIconColor = if (isBlockingEnabled) iconsColor else iconsColor.copy(0.6f)
+    val headlineColor = if (isBlockingEnabled) SimpleTheme.colorScheme.onSurface else disabledTextColor
+    val supportingColor = if (isBlockingEnabled) SimpleTheme.colorScheme.onSurfaceVariant else disabledTextColor
+
+    // Surface imitates ListItem
+    Surface(
         modifier = modifier,
-        headlineContent = {
-            if (hasContactName) {
-                contactNameContent()
-            } else {
-                blockedNumberContent()
+        color = containerColor,
+        tonalElevation = 0.dp,
+        shadowElevation = 0.dp,
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min) // Automatic height based on content
+                .padding(start = 20.dp, end = 2.dp), // Indents as in ListItem
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            Column(
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(vertical = 8.dp),
+            ) {
+                if (hasContactName) {
+                    // Headline - contact name
+                    Text(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        text = blockedNumber.contactName.toString(),
+                        color = headlineColor
+                    )
+
+                    // Supporting - phone number
+                    BlockedNumberHeadlineContent(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        blockedNumber = blockedNumber,
+                        hasContactName = hasContactName,
+                        textColor = supportingColor
+                    )
+                } else {
+                    // Only headline - telephone number
+                    BlockedNumberHeadlineContent(
+                        modifier = Modifier.padding(horizontal = 8.dp),
+                        blockedNumber = blockedNumber,
+                        hasContactName = hasContactName,
+                        textColor = headlineColor
+                    )
+                }
             }
-        },
-        supportingContent = {
-            if (hasContactName) {
-                blockedNumberContent()
+
+            // Trailing content
+            Box(
+                modifier = Modifier.padding(end = 16.dp)
+            ) {
+                BlockedNumberTrailingContent(
+                    onDelete = { onDelete(setOf(blockedNumber.id)) },
+                    onCopy = { onCopy(blockedNumber) },
+                    iconColor = trailingIconColor
+                )
             }
-        },
-        trailingContent = {
-            BlockedNumberTrailingContent(
-                onDelete = {onDelete(setOf(blockedNumber.id))},
-                onCopy = {onCopy(blockedNumber)}
-            )
-        },
-        colors = blockedNumberListItemColors(
-            isSelected = isSelected,
-            isBlockingEnabled = isBlockingEnabled,
-        )
+        }
+    }
+}
+
+// Updated BlockedNumberHeadlineContent with text colour support
+@Composable
+private fun BlockedNumberHeadlineContent(
+    modifier: Modifier = Modifier,
+    blockedNumber: BlockedNumber,
+    hasContactName: Boolean,
+    textColor: Color? = null
+) {
+    Text(
+        text = blockedNumber.number,
+        modifier = modifier,
+        color = textColor ?: if (hasContactName) {
+            LocalContentColor.current.copy(alpha = 0.7f)
+        } else {
+            LocalContentColor.current
+        }
     )
+}
+
+// Updated BlockedNumberTrailingContent with icon colour support
+@Composable
+private fun BlockedNumberTrailingContent(
+    onDelete: () -> Unit,
+    onCopy: () -> Unit,
+    iconColor: Color? = null
+) {
+    var isMenuVisible by remember { mutableStateOf(false) }
+    val dismissMenu = remember {
+        {
+            isMenuVisible = false
+        }
+    }
+
+    DropdownMenu(
+        expanded = isMenuVisible,
+        onDismissRequest = dismissMenu
+    ) {
+        SimpleDropDownMenuItem(onClick = {
+            onCopy()
+            dismissMenu()
+        }, text = {
+            Text(
+                text = stringResource(id = R.string.copy_number_to_clipboard),
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal
+            )
+        })
+        SimpleDropDownMenuItem(onClick = {
+            onDelete()
+            dismissMenu()
+        }, text = {
+            Text(
+                text = stringResource(id = R.string.unblock),
+                modifier = Modifier.fillMaxWidth(),
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Normal
+            )
+        })
+    }
+
+    IconButton(
+        modifier = Modifier.offset(x = 12.dp),
+        onClick = { isMenuVisible = true }
+    ) {
+        Icon(
+            Icons.Rounded.MoreVert,
+            contentDescription = stringResource(id = R.string.more_options),
+            tint = iconColor ?: iconsColor
+        )
+    }
 }
 
 @Composable
@@ -532,8 +667,8 @@ private fun BlockedNumberTrailingContent(modifier: Modifier = Modifier, onDelete
     IconButton(
         modifier = Modifier.offset(x = 12.dp),
         onClick = {
-        isMenuVisible = true
-    }) {
+            isMenuVisible = true
+        }) {
         Icon(Icons.Rounded.MoreVert, contentDescription = stringResource(id = R.string.more_options), tint = iconsColor)
     }
 }
@@ -603,7 +738,7 @@ private fun actionModeBgColor(): Color =
     if (LocalTheme.current is Theme.SystemDefaultMaterialYou) {
         SimpleTheme.colorScheme.primaryContainer
     } else {
-        actionModeColor
+        SimpleTheme.colorScheme.surface //actionModeColor
     }
 
 
@@ -614,11 +749,12 @@ private fun BlockedNumberActionMenu(
     onCopy: () -> Unit,
     iconColor: Color? = null,
 ) {
+    val deleteIcon = ImageVector.vectorResource(id = R.drawable.ic_delete_outline)
     val actionMenus = remember(selectedIdsCount) {
         val delete =
             ActionItem(
                 nameRes = R.string.unblock,
-                icon = Icons.Rounded.Delete,
+                icon = deleteIcon,
                 doAction = onDelete,
                 overflowMode = OverflowMode.NEVER_OVERFLOW,
                 iconColor = iconColor
@@ -691,7 +827,7 @@ private fun NonActionModeToolbar(
         actions = {
             val actionMenus = remember {
                 listOf(
-                    ActionItem(R.string.add_a_blocked_number, icon = Icons.Rounded.Add, doAction = onAdd, overflowMode = OverflowMode.IF_NECESSARY),
+                    ActionItem(R.string.add_a_blocked_number, icon = Icons.Rounded.Add, doAction = onAdd, overflowMode = OverflowMode.ALWAYS_OVERFLOW),
                     ActionItem(R.string.import_blocked_numbers, doAction = onImportBlockedNumbers, overflowMode = OverflowMode.ALWAYS_OVERFLOW),
                     ActionItem(R.string.export_blocked_numbers, doAction = onExportBlockedNumbers, overflowMode = OverflowMode.ALWAYS_OVERFLOW),
                 ).toImmutableList()
