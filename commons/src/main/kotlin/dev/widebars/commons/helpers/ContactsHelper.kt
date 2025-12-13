@@ -22,7 +22,13 @@ import java.util.Locale
 import androidx.core.util.size
 import androidx.core.net.toUri
 import androidx.core.graphics.scale
+import androidx.core.util.size
 import java.util.LinkedHashSet
+import kotlin.and
+import kotlin.collections.addAll
+import kotlin.text.contains
+import kotlin.text.toLong
+import kotlin.toString
 
 class ContactsHelper(val context: Context) {
     companion object {
@@ -45,11 +51,11 @@ class ContactsHelper(val context: Context) {
 
             if (getAll) {
                 displayContactSources = if (ignoredContactSources.isEmpty()) {
-                    context.getAllContactSources().map { it.name }.toMutableList() as ArrayList
+                    context.getAllContactSources().map { it.name }.toMutableList() as java.util.ArrayList
                 } else {
                     context.getAllContactSources().filter {
                         it.getFullIdentifier().isNotEmpty() && !ignoredContactSources.contains(it.getFullIdentifier())
-                    }.map { it.name }.toMutableList() as ArrayList
+                    }.map { it.name }.toMutableList() as java.util.ArrayList
                 }
             }
 
@@ -103,7 +109,7 @@ class ContactsHelper(val context: Context) {
             Contact.showNicknameInsteadNames = context.baseConfig.showNicknameInsteadNames
             Contact.sortingSymbolsFirst = context.baseConfig.sortingSymbolsFirst
             Contact.collator = Collator.getInstance(context.sysLocale())
-//            System.setProperty("java.util.Arrays.useLegacyMergeSort", "true") //https://stackoverflow.com/questions/11441666/java-error-comparison-method-violates-its-general-contract
+            System.setProperty("java.util.Arrays.useLegacyMergeSort", "true") //https://stackoverflow.com/questions/11441666/java-error-comparison-method-violates-its-general-contract
             resultContacts.sort()
 
             Handler(Looper.getMainLooper()).post {
