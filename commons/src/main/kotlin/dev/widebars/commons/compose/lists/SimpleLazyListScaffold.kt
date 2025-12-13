@@ -12,7 +12,6 @@ import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccessTime
 import androidx.compose.material3.*
-import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -24,6 +23,7 @@ import dev.widebars.commons.compose.extensions.MyDevices
 import dev.widebars.commons.compose.extensions.plus
 import dev.widebars.commons.compose.extensions.rememberMutableInteractionSource
 import dev.widebars.commons.compose.theme.AppThemeSurface
+import dev.widebars.commons.compose.theme.isLitWell
 
 @Composable
 fun SimpleLazyListScaffold(
